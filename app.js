@@ -1,7 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-const mongoose = require('mongoose');
 const stockRoutes = require('./api/routes/stocks');
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -22,8 +21,5 @@ app.use((error, req, res, next) => {
         }
     });
 });
-
-mongoose.connect('mongodb://rupert:Arigato123@mongodb-707-0.cloudclusters.net/test-db?authSource=admin', {useNewUrlParser : true});
-mongoose.Promise = global.Promise;
 
 module.exports = app;
