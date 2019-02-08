@@ -11,10 +11,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.398.0",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "express-route": "^0.1.4",
     "lodash": "^4.17.11",
-    "mongoose": "^5.4.4"
+    "mongoose": "^5.4.4",
+    "uuid": "^3.3.2"
   }
 }

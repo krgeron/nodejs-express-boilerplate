@@ -3,16 +3,40 @@ const router = express.Router();
 const Stock = require('../models/stock');
 const mongoose = require('mongoose');
 const _ = require('lodash');
+const awsConfig = require('../../aws/config');
+const AWS = awsConfig.initAWS('ap-northeast-1', 'asurion-poc.amadevops');
+const uuid = require('uuid/v4');
+
+
+var ctr = 0;
+
+const docClient = new AWS.DynamoDB.DocumentClient();
 
 router.get('/', (req, res, next) => {
-    Stock.find()
-        .select('name')
-        .select('symbol')
-        .exec()
-        .then(docs => {
-            console.log(docs);
-            res.status(200).json(docs);
-        });
+
+    var params = {
+        TableName : 'test-dynamo-db',
+    };
+
+    docClient.scan(params, function(err, data) {
+        if(err) {
+            console.log(`Error: ${JSON.stringify(err)}`)
+        } else {
+            console.log(`Success: ${JSON.stringify(data)}`);
+            res.status(200).json(data);
+        }
+    });
+    
+    // Stock.find()
+    //     .select('name')
+    //     .select('symbol')
+    //     .exec()
+    //     .then(docs => {
+    //         console.log(docs);
+    //         res.status(200).json(docs);
+    //     }).catch(err => {
+    //         console.log(err.message);
+    //     });
     // Stock.find({}, 'name', function (err, stocks) {
     //     if (err) {
     //         console.log(err);
@@ -24,7 +48,8 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/:symbol', (req, res, next) => {
-    const stockIdParam = req.params;
+    let stockIdParam = req.params;
+ 
     Stock.find(stockIdParam)
         .select('symbol')
         .select('name')
